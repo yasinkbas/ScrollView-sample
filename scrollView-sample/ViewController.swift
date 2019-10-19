@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var slider: userList!
+    var slider: UserList!
     
     var safeGuide: UILayoutGuide!
     
@@ -54,7 +54,7 @@ class ViewController: UIViewController {
     
     //---------------------------- Make Slider ----------------------------//
     func makeSlider() {
-        slider = userList(inView: view)
+        slider = UserList(inView: view)
         slider.didSelectItem = { index in
             print(index)
         }

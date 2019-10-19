@@ -1,5 +1,5 @@
 //
-//  userList.swift
+//  UserList.swift
 //  scrollView-sample
 //
 //  Created by Yasin Akbaş on 19.10.2019.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class userList: UIScrollView {
+class UserList: UIScrollView {
     
     var didSelectItem: ((_ index: Int)->())?
     
