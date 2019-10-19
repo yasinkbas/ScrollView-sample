@@ -30,6 +30,7 @@ class UserList: UIScrollView {
         
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
+        isPagingEnabled = true
         
         alpha = 0.85
         
