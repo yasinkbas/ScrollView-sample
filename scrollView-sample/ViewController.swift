@@ -10,10 +10,13 @@ import UIKit
 
 class ViewController: UIViewController, UIScrollViewDelegate {
     
-    var slider: UserList!
+    var slider: ItemList!
     var pageControl: UIPageControl!
+    var form: FormView!
     
     var safeGuide: UILayoutGuide!
+    
+    var addButtonClicked = false
     
     private lazy var backgroundImage: UIImageView = {
         let imageView = UIImageView()
@@ -29,34 +32,99 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = #colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)
         return view
     }()
-
     
+    private lazy var addButton: UIButton = {
+        let button = UIButton()
+        button.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        button.setTitle("+", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 40)
+        button.titleLabel?.textColor = .white
+        
+        button.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
+        return button
+    }()
+    
+    // MARK: - Actions
+    //---------------------------- AddButton ----------------------------//
+    @objc func addButtonPressed(sender: UIButton) {
+        addButtonClicked = !addButtonClicked
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0,
+            options: [.curveEaseInOut,.allowUserInteraction],
+            animations: {
+                let angle: CGFloat = self.addButtonClicked ? .pi / 4 : 0.0
+                self.addButton.transform = CGAffineTransform(rotationAngle: angle)
+                self.view.layoutIfNeeded()
+        },
+            completion: nil
+        )
+        
+        if addButtonClicked {
+//            form.topAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -form.frame.height).isActive = true
+            
+        } else {
+            
+        }
+        form.isHidden = !addButtonClicked
+        
+    }
+
+    // MARK: - View
     //---------------------------- View lifecycle ----------------------------//
     override func viewDidLoad() {
         super.viewDidLoad()
+        safeGuide = view.layoutMarginsGuide
+        
+        // backgroundImage
         view.addSubview(backgroundImage)
         
-        safeGuide = view.layoutMarginsGuide
+        // slider
         makeSlider()
-        setUpMenuView()
+        
+        // page control for slider
         makePageControl()
         
+        // menuView
+        view.addSubview(menuView)
+        setUpMenuViewConstraints()
+        
+        // add button
+        view.addSubview(addButton)
+        setUpAddButtonConstraints()
+        
+        // form
+        makeForm()
+        
+    }
+    // MARK: - Constraints
+    //---------------------------- Menu View Constraints ----------------------------//
+    func setUpMenuViewConstraints() {
+        
     }
     
-    //---------------------------- Menu View ----------------------------//
-    func setUpMenuView() {
-        self.view.addSubview(menuView)
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.menuView.leadingAnchor.constraint(equalTo: safeGuide.leadingAnchor).isActive = true
-        self.menuView.topAnchor.constraint(equalTo: safeGuide.topAnchor).isActive = true
-        self.menuView.trailingAnchor.constraint(equalTo: safeGuide.trailingAnchor).isActive = true
-        
+    //---------------------------- Add Button Constraints ----------------------------//
+    func setUpAddButtonConstraints() {
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.trailingAnchor.constraint(equalTo: safeGuide.trailingAnchor).isActive = true
+        addButton.topAnchor.constraint(equalTo: view.topAnchor,constant: 16).isActive = true
     }
     
+    // MARK: - Make
     //---------------------------- Make Slider ----------------------------//
+    
+    func makeForm() {
+        form = FormView()
+        form.frame = CGRect(x: 0, y: 0, width: view.bounds.width - 50, height: view.bounds.height - 300)
+        form.center = view.center
+        form.backgroundColor = .white
+        form.isHidden = true
+        form.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(form)
+    }
+    
     func makeSlider() {
-        slider = UserList(inView: view)
+        slider = ItemList(inView: view)
         slider.didSelectItem = { index in
             print(index)
         }
@@ -65,15 +133,15 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(slider)
     }
     
-    //---------------------------- Page control ----------------------------//
+    //---------------------------- Make Page control ----------------------------//
     func makePageControl() {
         let pageControlWidth = view.frame.width / 3
         pageControl = UIPageControl(frame: CGRect(x: 0, y: 0, width: pageControlWidth, height: 20))
         pageControl.frame.origin = CGPoint(x: view.frame.midX - pageControlWidth / 2, y: view.frame.maxY - 30)
-        pageControl.numberOfPages = 10
+        pageControl.numberOfPages = slider.totalPages
         pageControl.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         pageControl.pageIndicatorTintColor = #colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)
-        pageControl.currentPageIndicatorTintColor = #colorLiteral(red: 0.989929378, green: 0.8843280673, blue: 0.1261277199, alpha: 1)
+        pageControl.currentPageIndicatorTintColor = #colorLiteral(red: 0.9771235585, green: 0.9493796229, blue: 0, alpha: 1)
         
         view.addSubview(pageControl)
     }
@@ -81,7 +149,6 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageNumber = round(slider.contentOffset.x / slider.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
-        print("worked")
     }
 }
 
