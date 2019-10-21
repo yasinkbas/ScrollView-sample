@@ -48,6 +48,8 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     //---------------------------- AddButton ----------------------------//
     @objc func addButtonPressed(sender: UIButton) {
         addButtonClicked = !addButtonClicked
+        
+        // button animation
         UIView.animate(
             withDuration: 0.2,
             delay: 0,
@@ -60,14 +62,37 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             completion: nil
         )
         
+        // form animation
         if addButtonClicked {
-//            form.topAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -form.frame.height).isActive = true
-            
+            form.isHidden = false
+            self.form.frame.origin.x = self.view.bounds.width / 2 - self.form.bounds.width / 2
+            self.form.frame.origin.y = -self.form.frame.height
+            view.addSubview(form)
+            UIView.animate(
+                withDuration: 0.4,
+                delay: 0.3,
+                usingSpringWithDamping: 0.6,
+                initialSpringVelocity: 10,
+                options: .curveEaseOut,
+                animations: {
+                    self.form.center = self.view.center
+            },
+                completion: nil
+            )
         } else {
-            
-        }
-        form.isHidden = !addButtonClicked
-        
+            UIView.animate(
+                withDuration: 0.4,
+                delay: 0.3,
+                usingSpringWithDamping: 0.8,
+                initialSpringVelocity: 10,
+                options: .curveEaseIn,
+                animations: {
+                    self.form.frame.origin.y = -self.form.frame.height
+            },
+                completion: { _ in
+                    self.form.removeFromSuperview()
+            })
+        }        
     }
 
     // MARK: - View
@@ -111,18 +136,18 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     }
     
     // MARK: - Make
-    //---------------------------- Make Slider ----------------------------//
     
+    //---------------------------- Make Form ----------------------------//
     func makeForm() {
         form = FormView()
         form.frame = CGRect(x: 0, y: 0, width: view.bounds.width - 50, height: view.bounds.height - 300)
-        form.center = view.center
         form.backgroundColor = .white
         form.isHidden = true
         form.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(form)
     }
     
+    //---------------------------- Make Slider ----------------------------//
     func makeSlider() {
         slider = ItemList(inView: view)
         slider.didSelectItem = { index in
