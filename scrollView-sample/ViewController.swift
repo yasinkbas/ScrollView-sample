@@ -70,7 +70,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             view.addSubview(form)
             UIView.animate(
                 withDuration: 0.4,
-                delay: 0.3,
+                delay: 0.0,
                 usingSpringWithDamping: 0.6,
                 initialSpringVelocity: 10,
                 options: .curveEaseOut,
@@ -82,7 +82,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         } else {
             UIView.animate(
                 withDuration: 0.4,
-                delay: 0.3,
+                delay: 0.0,
                 usingSpringWithDamping: 0.8,
                 initialSpringVelocity: 10,
                 options: .curveEaseIn,
