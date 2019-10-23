@@ -56,7 +56,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             options: [.curveEaseInOut,.allowUserInteraction],
             animations: {
                 let angle: CGFloat = self.addButtonClicked ? .pi / 4 : 0.0
+                let scale: CGFloat = self.addButtonClicked ? 1.3 : 1.0
                 self.addButton.transform = CGAffineTransform(rotationAngle: angle)
+                    .concatenating(CGAffineTransform(scaleX: scale, y: scale))
                 self.view.layoutIfNeeded()
         },
             completion: nil
@@ -66,13 +68,13 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         if addButtonClicked {
             form.isHidden = false
             self.form.frame.origin.x = self.view.bounds.width / 2 - self.form.bounds.width / 2
-            self.form.frame.origin.y = -self.form.frame.height
+            self.form.frame.origin.y = self.view.bounds.height + self.form.bounds.height
             view.addSubview(form)
             UIView.animate(
                 withDuration: 0.4,
                 delay: 0.0,
-                usingSpringWithDamping: 0.6,
-                initialSpringVelocity: 10,
+                usingSpringWithDamping: 0.8,
+                initialSpringVelocity: 30,
                 options: .curveEaseOut,
                 animations: {
                     self.form.center = self.view.center
@@ -81,13 +83,13 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             )
         } else {
             UIView.animate(
-                withDuration: 0.4,
+                withDuration: 0.35,
                 delay: 0.0,
                 usingSpringWithDamping: 0.8,
                 initialSpringVelocity: 10,
                 options: .curveEaseIn,
                 animations: {
-                    self.form.frame.origin.y = -self.form.frame.height
+                    self.form.frame.origin.y = self.view.bounds.height + self.form.bounds.height
             },
                 completion: { _ in
                     self.form.removeFromSuperview()
