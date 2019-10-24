@@ -18,11 +18,21 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     
     var addButtonClicked = false
     
+    private lazy var formBackgroundView: UIView = {
+        let view = UIView()
+        view.frame = CGRect(x: 0, y: 70, width: self.view.frame.width, height: self.view.frame.height)
+        print(view.frame)
+        view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.75)
+        view.isHidden = true
+        return view
+    }()
+    
     private lazy var backgroundImage: UIImageView = {
         let imageView = UIImageView()
         imageView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
         imageView.image = #imageLiteral(resourceName: "background")
         imageView.contentMode = .scaleToFill
+        print(imageView.frame, "imageView")
         return imageView
     }()
     
@@ -53,7 +63,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         UIView.animate(
             withDuration: 0.2,
             delay: 0,
-            options: [.curveEaseInOut,.allowUserInteraction],
+            options: [.curveEaseInOut],
             animations: {
                 let angle: CGFloat = self.addButtonClicked ? .pi / 4 : 0.0
                 let scale: CGFloat = self.addButtonClicked ? 1.3 : 1.0
@@ -71,13 +81,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             self.form.frame.origin.y = self.view.bounds.height + self.form.bounds.height
             view.addSubview(form)
             UIView.animate(
-                withDuration: 0.4,
+                withDuration: 0.5,
                 delay: 0.0,
-                usingSpringWithDamping: 0.8,
-                initialSpringVelocity: 30,
+                usingSpringWithDamping: 0.7,
+                initialSpringVelocity: 0.0,
                 options: .curveEaseOut,
                 animations: {
                     self.form.center = self.view.center
+                    self.formBackgroundView.isHidden = !self.addButtonClicked
             },
                 completion: nil
             )
@@ -85,16 +96,18 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             UIView.animate(
                 withDuration: 0.35,
                 delay: 0.0,
-                usingSpringWithDamping: 0.8,
-                initialSpringVelocity: 10,
+                usingSpringWithDamping: 1.0,
+                initialSpringVelocity: 0.0,
                 options: .curveEaseIn,
                 animations: {
                     self.form.frame.origin.y = self.view.bounds.height + self.form.bounds.height
+                    self.formBackgroundView.isHidden = !self.addButtonClicked
             },
                 completion: { _ in
                     self.form.removeFromSuperview()
             })
-        }        
+        }
+        
     }
 
     // MARK: - View
@@ -123,6 +136,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         // form
         makeForm()
         
+        // darker view
+        view.addSubview(formBackgroundView)
+        
     }
     // MARK: - Constraints
     //---------------------------- Menu View Constraints ----------------------------//
@@ -141,9 +157,13 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     
     //---------------------------- Make Form ----------------------------//
     func makeForm() {
-        form = FormView()
-        form.frame = CGRect(x: 0, y: 0, width: view.bounds.width - 50, height: view.bounds.height - 300)
-        form.backgroundColor = .white
+        
+        form = FormView(frame: CGRect(
+            x: 0,
+            y: 0,
+            width: view.bounds.width - 50,
+            height: view.bounds.height - 300
+        ))
         form.isHidden = true
         form.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(form)
