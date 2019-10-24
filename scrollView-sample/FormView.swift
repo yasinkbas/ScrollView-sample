@@ -22,7 +22,7 @@ class FormView: UIView {
         title.text = "Add Item"
         title.textColor = .white
         title.textAlignment = .center
-        title.font = UIFont(name: "avenirnext-demibold", size: 18)
+        title.font = UIFont.setFont(name: .avenirnextdemibold, size: 18)
         title.adjustsFontSizeToFitWidth = true
         title.minimumScaleFactor = 0.5
         view.addSubview(title)
@@ -31,17 +31,26 @@ class FormView: UIView {
     
     private lazy var itemNameTextField: FormTextField = {
         let textField = FormTextField()
-        textField.frame.size = CGSize(width: frame.width / 1.5, height: 30)
-        textField.center = center
-        textField.placeholder = "Please enter item name"
+        let width = bounds.width - 100
+        textField.frame = CGRect(x: frame.midX - width / 2 , y: 100, width: width, height: 40)
+        textField.addPlaceholder(text: "Please enter item name")
+        return textField
+    }()
+    
+    private lazy var itemDescriptionTextField: FormTextField = {
+        let textField = FormTextField()
+        let width = bounds.width - 100
         return textField
     }()
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        translatesAutoresizingMaskIntoConstraints = false
         configureMainView()
         addViews()
+        makeConstraints()
+        
     }
     
     private func addViews() {
@@ -65,6 +74,10 @@ class FormView: UIView {
         let maskLayer = CAShapeLayer()
         maskLayer.path = maskPath.cgPath
         layer.mask = maskLayer
+    }
+    
+    private func makeConstraints() {
+        
     }
     
     required init?(coder: NSCoder) {

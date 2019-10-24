@@ -83,7 +83,7 @@ class ItemList: UIScrollView {
             itemname.center = profileView.center
             itemname.frame.origin.y = profileView.frame.maxY + 8
             itemname.text = "\(i). item"
-            itemname.font = UIFont(name: "AvenirNextCondensed-DemiBold", size: 24)
+            itemname.font = UIFont.setFont(name: .avenirnextcondenseddemibold, size: 24)
             itemname.textColor = .white
             itemname.textAlignment = .center
             page.addSubview(itemname)
@@ -105,7 +105,7 @@ class ItemList: UIScrollView {
             aboutTextLabel.adjustsFontSizeToFitWidth = true
             aboutTextLabel.numberOfLines = 0
             aboutTextLabel.minimumScaleFactor = 0.4
-            aboutTextLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 16)
+            aboutTextLabel.font = UIFont.setFont(name: .avenirnextcondensedregular, size: 16)
             page.addSubview(aboutTextLabel)
             
             addSubview(page)
