@@ -8,6 +8,9 @@
 
 import UIKit
 
+
+let api = RealmAPI()
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
